@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+# Define the URLs to fetch the robots.txt files
+url1="https://seirdy.one/robots.txt"
+url2="https://raw.githubusercontent.com/ai-robots-txt/ai.robots.txt/refs/heads/main/robots.txt"
+
+# Define the output file
+output_file="robots.txt"
+
+# Fetch the content from the URLs
+content1=$(curl -s "$url1")
+content2=$(curl -s "$url2")
+
+# Extract user-agent lines from the first content
+user_agents_1=$(echo "$content1" | grep -Ei '^user-agent: ' | sed 's/^User-Agent: /User-agent: /' | sed '/User-agent: \*/d')
+
+# Extract user-agent lines from the second content
+user_agents_2=$(echo "$content2" | grep -Ei '^user-agent: ' | sed 's/^User-Agent: /User-agent: /')
+
+# Create or overwrite the robots.txt file with the new content
+cat <<EOF > "$output_file"
+User-agent: *
+Disallow:
+Sitemap: https://example.com/sitemap.xml
+
+# Based on https://seirdy.one/robots.txt
+
+User-agent: Adsbot
+Disallow: /
+Allow: /ads.txt
+Allow: /app-ads.txt
+
+$user_agents_1
+
+# Based on https://github.com/ai-robots-txt/ai.robots.txt/blob/main/robots.txt
+
+$user_agents_2
+Disallow: /
+EOF
+
+echo "robots.txt has been updated."
