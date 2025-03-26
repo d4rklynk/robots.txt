@@ -4,7 +4,6 @@ name: Update robots.txt
 
 # Controls when the workflow will run
 on:
-  on:
   schedule:
      - cron:  '0 12 * * *'
 
