@@ -27,3 +27,13 @@ jobs:
         run: |
           chmod +x ./update-robots
           ./update-robots
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "contact@samsepi0l.dev"
+          git config --local user.name "D4rkLynk"
+          git add robots.txt
+          git commit -m "Update robots.txt"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
